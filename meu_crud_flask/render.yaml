@@ -6,14 +6,14 @@ services:
     region: oregon   # alterar para sua região
     plan: free       # ou starter/professional
     buildCommand: |
-      python -m venv .venv
-      source .venv/bin/activate
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      source .venv/bin/activate
       gunicorn app:app
     envVars:
-      FLASK_ENV: production
-      SECRET_KEY: 'substitua_por_uma_chave_secreta'
-      DATABASE_URL: 'sqlite:///headcount.db'
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        value: substitua_por_uma_chave_secreta
+      - key: DATABASE_URL
+        value: sqlite:///headcount.db
