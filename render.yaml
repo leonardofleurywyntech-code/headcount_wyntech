@@ -2,18 +2,24 @@ services:
   - type: web
     name: headcount_wyntech
     env: python
-    runtime: python-3.12.10
-    region: oregon   # alterar para sua região
-    plan: free       # ou starter/professional
+    runtime: python-3.12.10   # Força Python 3.12
+    region: oregon
+    plan: free
     buildCommand: |
+      # Remove qualquer virtualenv antigo e limpa caches
+      rm -rf .venv
       python -m venv .venv
       source .venv/bin/activate
-      pip install --upgrade pip
-      pip install -r requirements.txt
+      pip install --upgrade pip setuptools wheel
+      # Limpa cache de pip para garantir compilação limpa
+      pip cache purge
+      # Instala dependências
+      pip install --no-cache-dir -r requirements.txt
     startCommand: |
       source .venv/bin/activate
       gunicorn app:app
     envVars:
-      FLASK_ENV: production
-      SECRET_KEY: 'substitua_por_uma_chave_secreta'
-      DATABASE_URL: 'sqlite:///headcount.db'
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///headcount.db
