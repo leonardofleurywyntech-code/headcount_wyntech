@@ -2,18 +2,15 @@ services:
   - type: web
     name: headcount_wyntech
     env: python
-    runtime: python-3.12.10
-    region: oregon   # alterar para sua região
-    plan: free       # ou starter/professional
+    runtime: python-3.12
+    region: oregon
+    plan: free
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: |
-      gunicorn app:app
+    startCommand: gunicorn app:app
     envVars:
       - key: FLASK_ENV
         value: production
-      - key: SECRET_KEY
-        value: substitua_por_uma_chave_secreta
       - key: DATABASE_URL
         value: sqlite:///headcount.db
